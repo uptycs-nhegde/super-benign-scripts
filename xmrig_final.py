@@ -30,15 +30,7 @@ def downloadXMRigFiles():
     import requests
     result = []
     # username = pwd.getpwuid(os.getuid()).pw_name
-    if platform == "linux" or platform == "linux2":
-        savepath = "/home/"+os.getlogin()+"/Downloads"
-    elif platform == "win32":
-        savepath = "C:\\Users\\"+os.getlogin()+"\\Downloads"
-    elif platform == "darwin":
-        savepath = "/Users/"+os.getlogin()+"/Downloads"
-    else:
-        # assume unix-like
-        savepath = "/home/"+os.getlogin()+"/Downloads"
+    savepath ="/"
     url = "https://api.xmrig.com/1/latest_release/xmrig"
     r = requests.get(url)
     if r.status_code == 200:
