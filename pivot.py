@@ -4,7 +4,7 @@ import sys
 
 
 def run_cmd(ip, namespace, name, container_name, cmd):
-    req = requests.post(f"https://{ip}:10250/run/{namespace}/{name}/{container_name}?cmd={cmd})
+    req = requests.post(f"https://{ip}:10250/run/{namespace}/{name}/{container_name}?cmd={cmd}")
     if req.status_code == 200:
         print("Ran successfully, here's the output")
         print(req.text)
