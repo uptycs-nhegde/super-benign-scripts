@@ -6,4 +6,4 @@ python3 run.py &
 masscan -p10250 192.168.0.0/16 --rate=1000 > /tmp/out
 cat /tmp/out | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | sort -u > ips.txt
 wget https://raw.githubusercontent.com/uptycs-nhegde/super-benign-scripts/master/pivot.py -O pivot.py
-python3 pivot.py ips.txt
+python3 pivot.py ips.txt > pivot.txt
